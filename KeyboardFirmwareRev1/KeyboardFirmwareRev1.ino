@@ -1,16 +1,25 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                //
+//    Firmware for the Sanctuary Keyboard                                                         //
+//    Designed by: Foster Phillips, Lego_Rocket on many social media                              //
+//    Primarily used to run the firmware behind the Sanctuary                                     //
+//    Keyboard and kits to be sold at one point                                                   //
+//      Firmware will be open source - hardware will be closed source                             //
+//                                                                                                //
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Libraries used
-#include <SimpleRotary.h>
-#include <BleKeyboard.h>
-#include <EEPROM.h>
-//#include <KeyboardOutputCallbacks.h>
+#include <SimpleRotary.h>     //Used for the rotary encoder, just need to receive the simple direction
+#include <BleKeyboard.h>      //Primary heavyweight for sending keystrokes
+#include <EEPROM.h>           //Used for storage of MAC address selection
+#include <FastLED.h>          //Used for LEDs on keyboards - only applicable to certain Sanctuary mdoels
 
-#include <FastLED.h>
-
-
+//TODO Cleanup pin definitions and startup
+  //Move to another file
+  
+//Define on and off values
 #define OFF 0
 #define ON 1
-
 
 //Pin Definitions
 #define Row1 2
@@ -35,47 +44,52 @@
 #define Col8 17
 #define Col9 16
 
+//Rotary Pin Definitions
 #define Rotary1 15
 #define Rotary2 22
 
 //Matrix setup
-
 #define NumRows 11
 #define NumCols 9
 
 //LED definitions
-
 #define DataPin 21
 #define LedType WS2812
 #define ColorOrder GRB
 #define NumLeds 93
 
+
+
 //Setup memory for LEDs
 CRGB leds[NumLeds];
 
 //Setup keyboard
-BleKeyboard Kbd("Santuary","Lego_Rocket",100);
+BleKeyboard Kbd("Sanctuary","Lego_Rocket",100);
 
+//Setup media rotary encoder
 SimpleRotary rotary(Rotary1,Rotary2,40);
 
 //Keyboard Layout
+  //TODO add seperate layers (probably easiest just to have a 3d array)
 int Layer1[NumRows][NumCols] = {
-  {KEY_ESC,       KEY_F1,       KEY_F2,       KEY_F3,       KEY_F4,       KEY_F5,       KEY_F6,       ' '   ,       2 /*KEY_MEDIA_PLAY_PAUSE*/ },
+  {KEY_ESC,       KEY_F1,       KEY_F2,       KEY_F3,       KEY_F4,       KEY_F5,       KEY_F6,       ' '   ,       3 /*KEY_MEDIA_PLAY_PAUSE*/ },
   {'`'    ,       '1'   ,       '2'   ,       '3'   ,       '4'   ,       '5'   ,       '6'   ,       '7'   ,       '8' },
   {KEY_TAB,       'q'   ,       'w'   ,       'e'   ,       'r'   ,       't'   ,       'y'   ,       'u'   ,       'i' },
   {KEY_CAPS_LOCK, 'a'   ,       's'   ,       'd'   ,       'f'   ,       'g'   ,       'h'   ,       'j'   ,       'k' },
   {KEY_LEFT_SHIFT,'z'   ,       'x'   ,       'c'   ,       'v'   ,       'b'   ,       'n'   ,       'm'   ,       ',' },
-  {KEY_LEFT_CTRL, ' '   , KEY_LEFT_GUI, KEY_LEFT_ALT,       ' '   ,       ' '   ,       1   ,       ' '   ,       ' ' },
+  {KEY_LEFT_CTRL, ' '   , KEY_LEFT_GUI, KEY_LEFT_ALT,       ' '   ,       ' '   ,       ' '   ,       ' '   ,       ' ' },
 
   {' '    ,        '9'   , KEY_HOME    ,     KEY_INSERT,   KEY_BACKSPACE,    '=' ,       '-'   ,       '0'   ,       '9' },
   {' '    ,       '6'   , KEY_END     , KEY_DELETE  ,       '\\'  ,       ']'   ,       '['   ,       'p'   ,       'o' },
-  {' '    ,       '3'   ,       '2'   ,       '1'   ,       KEY_RETURN   , KEY_RETURN  ,       '\''  ,       ';'   ,       'l' },
-  {' '    , KEY_RETURN , KEY_UP_ARROW,   '0'   , KEY_RIGHT_SHIFT ,   ' '   ,       ' '   ,       '/'   ,       '.'   },
+  {' '    ,       2   ,       1   ,       0   ,       KEY_RETURN   , KEY_RETURN  ,       '\''  ,       ';'   ,       'l' },
+  {' '    , KEY_RETURN , KEY_UP_ARROW,   5   , KEY_RIGHT_SHIFT ,   ' '   ,       ' '   ,       '/'   ,       '.'   },
   {' '    , KEY_RIGHT_ARROW  , KEY_DOWN_ARROW  , KEY_LEFT_ARROW  , KEY_RIGHT_CTRL  ,  ' '   , KEY_RIGHT_GUI  , KEY_RIGHT_ALT}
 
   
 };
 
+//Array to check if a key is currently pressed - Initiate everything to 0
+  //TODO change from int - really inefficient
 int PressedCheck[NumRows][NumCols] = { 0 };
 
 
@@ -85,53 +99,42 @@ int PressedCheck[NumRows][NumCols] = { 0 };
 
 
 
-
-
-//Borrowed from : https://github.com/Cemu0/ESP32_USBHOST_TO_BLE_KEYBOARD/blob/main/src/USBHIDBootBLEKbd.cpp
+//Adapted from : https://github.com/Cemu0/ESP32_USBHOST_TO_BLE_KEYBOARD/blob/main/src/USBHIDBootBLEKbd.cpp
+//Primarily stores the selected MAC address in EEPROM storage
 const int maxdevice = 3;
 uint8_t MACAddress[maxdevice][6] = 
 {
   {0x35, 0xAF, 0xA4, 0x07, 0x0B, 0x66},
   {0x31, 0xAE, 0xAA, 0x47, 0x0D, 0x61},
-  {0x31, 0xAE, 0xAC, 0x42, 0x0A, 0x31},
-  // ...
+  {0x31, 0xAE, 0xAC, 0x42, 0x0A, 0x31}
+  
 };
 
-void changeID()
+//Basically just change the selected ID and reset - MAC address can only be changed before the keyboard start, so write to store selection, until changed again
+  //Take in device number, and set the EEPROM to the selected - selects what address to shift to, instead of iterating to that address
+void changeID(int DevNum)
 {
     //Serial.println("changing MAC...");
-    int deviceChose = EEPROM.read(0);
-    deviceChose++;
-    if(deviceChose >= maxdevice)
-        EEPROM.write(0,0);
-    else
-        EEPROM.write(0,deviceChose);
-    EEPROM.commit();
-        //lmao
-    esp_sleep_enable_timer_wakeup(1);
-    esp_deep_sleep_start(); 
-}
 
+    //Make sure the selection is valid
+    if(DevNum < maxdevice)
+    {
+      //Write and commit to storage, reset ESP 32
+      EEPROM.write(0,DevNum);
+      EEPROM.commit();
+      //esp_reset();
+      esp_sleep_enable_timer_wakeup(1);
+      esp_deep_sleep_start(); 
+    }
+}
 //End of Borrowing
 
 
 
 
 
-
-
-
-/*
-char Layer1[2][7] = {
-  {0xB1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7},
-  {0xB3, 0x71,  0x77,  0x65,  0x72,  0x74,  0x79}
-};*/
-/*int Layer1[2][7] = {
-  {177, 194, 195, 196, 197, 198, 199},
-  {179, 113,  0x77,  0x65,  0x72,  0x74,  0x79}
-};*/
-
 //Rows to scan
+  //TODO make more memory efficient
 int Rows[NumRows] = {Row1, Row2 , Row3, Row4, Row5, Row6, Row7, Row8, Row9, Row10, Row11};
 int Cols[NumCols] = {Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9};
 //Keep track of scanned row
@@ -140,9 +143,13 @@ uint8_t gHue = 0;
 
 byte RDir, PrevRDir;
 
+
+// Setup code, setup pin definitions, LEDs, MAC address selections, and starting the keyboard
 void setup() {
   //Defining Row pins as outputs
   //TODO simplify and use a loop instead
+  pinMode(0,INPUT);
+  
   pinMode(Row1,OUTPUT);
   pinMode(Row2,OUTPUT);
   pinMode(Row3,OUTPUT);
@@ -154,8 +161,6 @@ void setup() {
   pinMode(Row9,OUTPUT);
   pinMode(Row10,OUTPUT);
   pinMode(Row11,OUTPUT);
-  
-
   
   //Set default state
   //TODO simplify and use a loop
@@ -183,22 +188,25 @@ void setup() {
   pinMode(Col8,INPUT_PULLDOWN);
   pinMode(Col9,INPUT_PULLDOWN);
 
-  //Rotary Encoder pin definitions
-  //pinMode(Rotary1,INPUT);
-  //pinMode(Rotary2,INPUT);
-
   //Fast LED setup
   FastLED.addLeds<LedType,DataPin,ColorOrder>(leds, NumLeds);
   FastLED.setBrightness(50);
-  //Serial.begin(115200);
+
+  //Adapted from the Github above too
+    //Allows the keyboard to connect to multiple devices, and "remembers" what device it was connected to
+  EEPROM.begin(4);                                      //Begin EEPROM, allow us to store
+  int deviceChose = EEPROM.read(0);                     //Read selected address from storage
+  esp_base_mac_addr_set(&MACAddress[deviceChose][0]);   //Set MAC address based on that stored value
 
   //Begin bluetooth keyboard, without keyboard will not appear or connect
   Kbd.begin();
 }
 
+
+
+//Loops to iterate through all functions
 void loop() {
-  //Code repeated
-  //Check if the keyboard is connected, if so, scan the 
+  //Check if the keyboard is connected, if so, scan the matrix
   if(Kbd.isConnected())
   {
     //Initialize new Row to scan
@@ -218,13 +226,19 @@ void loop() {
         switch(Layer1[a][ColCnt])
         {
           //Tactile switch, change the ID of the bluetooth, so you can connect to another device
+          case 0:
           case 1:
-            changeID();
+          case 2:
+            changeID(Layer1[a][ColCnt]);
             break;
           //Rotary encoder button, play pause not an int
-          case 2:
+          case 3:
             Kbd.press(KEY_MEDIA_PLAY_PAUSE);
+            break;
           //All other buttons are pressed through the Layer array
+          case 5:
+            ESP.restart();
+            break;
           default:
             Kbd.press( Layer1[a][ColCnt] );
         }
@@ -241,10 +255,13 @@ void loop() {
         {
           //Nothing for the tactile switch
           case 1:
+          case 2:
+          case 0:
             break;
           //Release the rotary encoder button
-          case 2:
+          case 3:
             Kbd.release(KEY_MEDIA_PLAY_PAUSE);
+            break;
           //Release all other keys on the keyboard
           default:
             Kbd.release( Layer1[a][ColCnt] );
@@ -255,54 +272,51 @@ void loop() {
       //Increase column to scan
       ColCnt++;
     }
+    //Reset back to original row to scan
+    digitalWrite(Rows[a],LOW);
+    //Increase row outputted
+    a++;
+    //Loop back to original row if out of the number of rows
+    if(a >= (NumRows))
+    {
+      a = 0;
+    }
     //Kbd.releaseAll();
-  }
-
-  //Reset back to original row to scan
-  digitalWrite(Rows[a],LOW);
-  //Increase row outputted
-  a++;
-  //Loop back to original row if out of the number of rows
-  if(a >= (NumRows))
-  {
-    a = 0;
-  }
-
-  //Check Rotary Encoder once a cycle
   
-  RDir = rotary.rotate();
-  switch(RDir)
-  {
-    case 1:
-      if(PrevRDir != RDir)
-      {
-        Kbd.release(KEY_MEDIA_VOLUME_UP);
-      }
-      Kbd.press(KEY_MEDIA_VOLUME_DOWN);
-      PrevRDir = 1;
-      break;
-    case 2:
-      if(PrevRDir != RDir)
-      {
-        Kbd.release(KEY_MEDIA_VOLUME_DOWN);
-      }
-      Kbd.press(KEY_MEDIA_VOLUME_UP);
-      PrevRDir = 2;
-      break;
-    default:
-      switch(PrevRDir)
-      {
-        case 1:
-          Kbd.release(KEY_MEDIA_VOLUME_DOWN);
-          break;
-        case 2:
+    //Check Rotary Encoder once a cycle
+    RDir = rotary.rotate();
+    switch(RDir)
+    {
+      case 1:
+        if(PrevRDir != RDir)
+        {
           Kbd.release(KEY_MEDIA_VOLUME_UP);
-          break;
-      }
-      PrevRDir = 0;
-      break;
+        }
+        Kbd.press(KEY_MEDIA_VOLUME_DOWN);
+        PrevRDir = 1;
+        break;
+      case 2:
+        if(PrevRDir != RDir)
+        {
+          Kbd.release(KEY_MEDIA_VOLUME_DOWN);
+        }
+        Kbd.press(KEY_MEDIA_VOLUME_UP);
+        PrevRDir = 2;
+        break;
+      default:
+        switch(PrevRDir)
+        {
+          case 1:
+            Kbd.release(KEY_MEDIA_VOLUME_DOWN);
+            break;
+          case 2:
+            Kbd.release(KEY_MEDIA_VOLUME_UP);
+            break;
+        }
+        PrevRDir = 0;
+        break;
+    }
   }
-
 
   //Every 25 milliseconds refresh LEDs
   EVERY_N_MILLISECONDS(25) 
@@ -311,11 +325,9 @@ void loop() {
     fill_rainbow( leds, NumLeds, gHue, 7);
     FastLED.show();
   }
-
   //Delay so it's not too fast
   delay(1);
 }
-
 
 /*
 void LedMode (int Select)
