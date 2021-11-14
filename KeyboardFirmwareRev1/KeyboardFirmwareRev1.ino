@@ -129,8 +129,8 @@ void changeID(int DevNum)
 }
 //End of Borrowing
 
-
-
+//Function prototyping
+void LedMode (int Select);
 
 
 //Rows to scan
@@ -190,7 +190,7 @@ void setup() {
 
   //Fast LED setup
   FastLED.addLeds<LedType,DataPin,ColorOrder>(leds, NumLeds);
-  FastLED.setBrightness(50);
+  FastLED.setBrightness(40);
 
   //Adapted from the Github above too
     //Allows the keyboard to connect to multiple devices, and "remembers" what device it was connected to
@@ -321,15 +321,13 @@ void loop() {
   //Every 25 milliseconds refresh LEDs
   EVERY_N_MILLISECONDS(25) 
   {
-    gHue++;
-    fill_rainbow( leds, NumLeds, gHue, 7);
-    FastLED.show();
+    LedMode(2);
   }
   //Delay so it's not too fast
   delay(1);
 }
 
-/*
+
 void LedMode (int Select)
 {
   switch(Select)
@@ -342,6 +340,7 @@ void LedMode (int Select)
       fill_solid(leds, NumLeds, CRGB::Cyan);      
       break;
     default:
-    
+      break;
   }
-}*/
+  FastLED.show();
+}
