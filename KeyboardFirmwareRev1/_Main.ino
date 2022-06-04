@@ -45,15 +45,15 @@ void setup() {
 
 
 
-int a = 0;                                              //Keep track of scanned row - needs to be outside of the void loop so it isn't reset
-
+int RowCnt = 0;                                              //Keep track of scanned row - needs to be outside of the void loop so it isn't reset
+int LayerCnt = 0;
 //Loops to iterate through all functions
 void loop() {
   //Check if the keyboard is connected, if so, scan the matrix
   if(Kbd.isConnected())
   {
     //Initialize new Row to scan
-    digitalWrite(Rows[a],HIGH);
+    digitalWrite(Rows[RowCnt],HIGH);
 
     
     //Check columns
@@ -63,16 +63,16 @@ void loop() {
     while(ColCnt <= (NumCols - 1))
     {
       //Check state of current position, and make sure it was previously off
-      if(digitalRead( Cols[ColCnt] ) == HIGH && PressedCheck[a][ColCnt] == OFF)
+      if(digitalRead( Cols[ColCnt] ) == HIGH && PressedCheck[LayerCnt][RowCnt][ColCnt] == OFF)
       {
         //Switch based on the key pressed, allows for unique functions other than alphanumerics
-        switch(Layer1[a][ColCnt])
+        switch(Layer1[LayerCnt][RowCnt][ColCnt])
         {
           //Change the ID of the bluetooth, so you can connect to another device
           case 0:
           case 1:
           case 2:
-            changeID(Layer1[a][ColCnt]);
+            changeID(Layer1[LayerCnt][RowCnt][ColCnt]);
             break;
           //Rotary encoder button, play pause not an int
           case 3:
@@ -82,19 +82,33 @@ void loop() {
           case 5:
             ESP.restart();
             break;
+          case FUNCTION_SW:
+            //PressedCheck.fill(OFF);
+            Kbd.releaseAll();
+            LayerCnt++;
+            break;
+          case NULL_CON:
+            break;
+          case NEXT:
+            Kbd.press(KEY_MEDIA_NEXT_TRACK);
+            Kbd.releaseAll();
+            break;
+          case PREV:
+            Kbd.press(KEY_MEDIA_PREVIOUS_TRACK);
+            break;
           default:
-            Kbd.press( Layer1[a][ColCnt] );
+            Kbd.press( Layer1[LayerCnt][RowCnt][ColCnt] );
         }
         //Assign the current key as ON, so it doesn't constantly press the button
-        PressedCheck[a][ColCnt] = ON;   
+        PressedCheck[LayerCnt][RowCnt][ColCnt] = ON;   
         //Serial.print( Layer1[a][ColCnt] );
       }
 
       //Otherwise, check if the switch was released
-      else if(digitalRead( Cols[ColCnt] ) == LOW && PressedCheck[a][ColCnt] == ON)
+      else if(digitalRead( Cols[ColCnt] ) == LOW && PressedCheck[LayerCnt][RowCnt][ColCnt] == ON)
       {
         //Switch based on the switch released
-        switch(Layer1[a][ColCnt])
+        switch(Layer1[LayerCnt][RowCnt][ColCnt])
         {
           //Nothing for the tactile switch
           case 1:
@@ -105,24 +119,52 @@ void loop() {
           case 3:
             Kbd.release(KEY_MEDIA_PLAY_PAUSE);
             break;
+          case FUNCTION_SW:
+            PressedCheck[LayerCnt][RowCnt][ColCnt] = OFF;
+            if(LayerCnt > 0)
+            {
+              LayerCnt--;
+            }
+            Kbd.release(KEY_MEDIA_PLAY_PAUSE);            
+            Kbd.release(KEY_MEDIA_PREVIOUS_TRACK);
+            Kbd.release(KEY_MEDIA_NEXT_TRACK);
+            Kbd.releaseAll();
+            break;
+          case NULL_CON:
+            PressedCheck[LayerCnt][RowCnt][ColCnt] = OFF;
+            if(LayerCnt > 0)
+            {
+              LayerCnt--;
+            }
+            Kbd.release(KEY_MEDIA_PLAY_PAUSE);            
+            Kbd.release(KEY_MEDIA_PREVIOUS_TRACK);
+            Kbd.release(KEY_MEDIA_NEXT_TRACK);
+            Kbd.releaseAll();
+            break;
+          case NEXT:
+            Kbd.release(KEY_MEDIA_NEXT_TRACK);
+            break;
+          case PREV:
+            Kbd.release(KEY_MEDIA_PREVIOUS_TRACK);
+            break;
           //Release all other keys on the keyboard
           default:
-            Kbd.release( Layer1[a][ColCnt] );
+            Kbd.release( Layer1[LayerCnt][RowCnt][ColCnt] );
         }
         //Let the keyboard know it's off, and to not constantly release keys that aren't released
-        PressedCheck[a][ColCnt] = OFF;
+        PressedCheck[LayerCnt][RowCnt][ColCnt] = OFF;
       }
       //Increase column to scan
       ColCnt++;
     }
     //Reset back to original row to scan
-    digitalWrite(Rows[a],LOW);
+    digitalWrite(Rows[RowCnt],LOW);
     //Increase row outputted
-    a++;
+    RowCnt++;
     //Loop back to original row if out of the number of rows
-    if(a >= (NumRows))
+    if(RowCnt >= (NumRows))
     {
-      a = 0;
+      RowCnt = 0;
     }
   
     //Check Rotary Encoder once a cycle

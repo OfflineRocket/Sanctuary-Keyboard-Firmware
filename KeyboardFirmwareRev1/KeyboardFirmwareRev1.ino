@@ -1,14 +1,26 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                                                                //
-//    Firmware for the Sanctuary Keyboard                                                         //
-//    Designed by: Foster Phillips, Lego_Rocket on many social media                              //
-//    Primarily used to run the firmware behind the Sanctuary                                     //
-//    Keyboard and kits to be sold at one point                                                   //
-//      Firmware will be open source - hardware will be closed source                             //
-//    This File is the first to compile - it does NOT include the main() functions                //
-//      That is only going to be in the _Main file, to allow for easy changing of Matrix functions//
-//                                                                                                //
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ __   __          
+|  |_|  |--.-----.
+|   _|     |  -__|
+|____|__|__|_____|
+ ______     ______     __   __     ______     ______   __  __     ______     ______     __  __    
+/\  ___\   /\  __ \   /\ "-.\ \   /\  ___\   /\__  _\ /\ \/\ \   /\  __ \   /\  == \   /\ \_\ \   
+\ \___  \  \ \  __ \  \ \ \-.  \  \ \ \____  \/_/\ \/ \ \ \_\ \  \ \  __ \  \ \  __<   \ \____ \  
+ \/\_____\  \ \_\ \_\  \ \_\\"\_\  \ \_____\    \ \_\  \ \_____\  \ \_\ \_\  \ \_\ \_\  \/\_____\ 
+  \/_____/   \/_/\/_/   \/_/ \/_/   \/_____/     \/_/   \/_____/   \/_/\/_/   \/_/ /_/   \/_____/ 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                  //
+//    Firmware for the Sanctuary Keyboard                                                           //
+//    Designed by: Foster Phillips, Lego_Rocket on many social media                                //
+//    https://linktr.ee/Lego_Rocket                                                                 //
+//    Primarily used to run the firmware behind the Sanctuary                                       //
+//    Keyboard and kits to be sold at one point                                                     //
+//      Firmware will be open source - hardware will be closed source                               //
+//    This File is the first to compile - it does NOT include the main() functions                  //
+//      That is only going to be in the _Main file, to allow for easy changing of Matrix functions  //
+//                                                                                                  //
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 //Libraries used
 #include <SimpleRotary.h>       //Used for the rotary encoder, just need to receive the simple direction
@@ -61,10 +73,10 @@ void changeID(int DevNum)
       esp_deep_sleep_start(); 
     }
 }
-//End of Borrowing
 
 
 uint8_t gHue = 0;                                       //Keep track of the colour wanted
+
 //LED Function, to be expanded upon to add more LED functionality later
 void LedMode (int Select)
 {

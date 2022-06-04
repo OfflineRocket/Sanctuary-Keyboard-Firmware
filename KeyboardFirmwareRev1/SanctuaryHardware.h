@@ -41,4 +41,12 @@
 #define ColorOrder GRB
 #define NumLeds 93
 
-//Testing
+
+#define FUNCTION_SW   256
+#define NULL_CON      257
+#define NEXT          258
+#define PREV          259
+
+
+//TODO add ifdefs, and change the offset of the LED bar (start LEF is ~10 on full RGB, is 0 on only the LED bar)
+// Add RGB battery functionality
