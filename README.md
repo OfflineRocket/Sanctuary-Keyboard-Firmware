@@ -1,3 +1,23 @@
+# The Sanctuary
+A ESP32 Based Keyboard, that can currently be built!
+
+## Instructions Available here: (to be added later)
+
+## Demo Video (To be added later)
+
+## Files Provided
+
+### CAD Files
+These are the files needed to 3d print the case for the Sanctuary, only the STL are provided.
+
+### Gerber
+This is the gerber for the second revision of the Sanctuary. It contains many bugfixes of the first revision, such as pulldown resistors, or spelling mistakes 
+
+## Photos
+Many photos of the Sanctuary, both in progress, and completed. In no particular order.
+
+### Firmware
+
 Unfinished Firmware for The Santuary wireless keyboard
 
 Based on the ESP32, this is a completely wireless keyboard, to be used however you would like. 
