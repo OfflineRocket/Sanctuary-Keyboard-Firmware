@@ -11,9 +11,11 @@ A ESP32 Based Keyboard, that can currently be built!
 These are the files needed to 3d print the case for the Sanctuary, only the STL are provided.
 
 ### Gerber
-This is the gerber for the second revision of the Sanctuary. It contains many bugfixes of the first revision, such as pulldown resistors, or spelling mistakes 
+This is the gerber for the second revision of the Sanctuary. It contains many bugfixes of the first revision, such as pulldown resistors, or spelling mistakes. Technically it is untested, however it is closely based on the original revision, so it should work.
 
-## Photos
+Can be ordered from many PCB manufacturers, such as JLC PCB, OSHPARK, or PCBWay. Personally, I used JLC PCB for the first revision. 
+
+### Photos
 Many photos of the Sanctuary, both in progress, and completed. In no particular order.
 
 ### Firmware
