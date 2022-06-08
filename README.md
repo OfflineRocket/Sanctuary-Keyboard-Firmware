@@ -1,39 +1,21 @@
 # The Sanctuary
 A ESP32 Based Keyboard, that can currently be built!
 
-## Instructions Available here: (to be added later)
-
 ## Demo Video (To be added later)
 
-## Files Provided
-
-### CAD Files
-These are the files needed to 3d print the case for the Sanctuary, only the STL are provided.
-
-### Gerber
-This is the gerber for the second revision of the Sanctuary. It contains many bugfixes of the first revision, such as pulldown resistors, or spelling mistakes. Technically it is untested, however it is closely based on the original revision, so it should work.
-
-Can be ordered from many PCB manufacturers, such as JLC PCB, OSHPARK, or PCBWay. Personally, I used JLC PCB for the first revision. 
-
-### Photos
-Many photos of the Sanctuary, both in progress, and completed. In no particular order.
+### [Instructions and Hardware Files Available Here](https://github.com/LegoRocket/Sanctuary-Keyboard-Hardware)
 
 ### Firmware
 
-Unfinished Firmware for The Santuary wireless keyboard
+Basic Firmware for The Santuary Wireless Keyboard
 
 Based on the ESP32, this is a completely wireless keyboard, to be used however you would like. 
 
-Kits and keyboards are planned to be sold eventually, but currently this repo is to track the firmware revisions, so that it can become a functioning keyboard.
+I unfortunately don't have the ability to sell kits or keyboards, but all files and instructions are available in the repo linked above. This repo is purely for the firmware of the keyboard, to allow for others to fork, and modify their own code.
 
-Unfortunately QMK and other pre-existing keyboard firmware is incompatible, leaving my programming skills up to the test. Basic functionality exists, however future features plan to be added, and as the program gets more complex, so does the ability to track changes (hence git)
+QMK and other pre-existing keyboard firmware are incompatible, leaving my programming skills up to the test. Basic functionality exists, however future features plan to be added, and as the program gets more complex, so does the ability to track changes (hence git). However, I will fully admit that I am not the greatest programmer in the world, and likely don't have time to manage this repo in full, so please feel free to fork it into your own repo.
 
 TODO:
-- Implement a better Matrix Implementation
-	- Preferably set in a seperate file to setup your matrix
-- Implement Multiple Layers
-- Implement Battery monitoring
+- Implement Battery monitoring (Requires additional Hardware)
 - Implement Different RGB animations
 - Implement Colour Brightness (and turn off)
-
-- Document Hardware Changes - seperate file
