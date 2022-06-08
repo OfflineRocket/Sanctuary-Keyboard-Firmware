@@ -3,11 +3,13 @@ A ESP32 Based Keyboard, that can currently be built!
 
 ## Demo Video (To be added later)
 
-### [Instructions and Hardware Files Available Here](https://github.com/LegoRocket/Sanctuary-Keyboard-Hardware)
+## [Instructions and Hardware Files Available Here](https://github.com/LegoRocket/Sanctuary-Keyboard-Hardware)
 
-### Firmware
+## Firmware
 
 Basic Firmware for The Santuary Wireless Keyboard
+
+All code is included in the "KeyboardFirmwareRev1" folder. Yes, I used the Arduino IDE, but I've tried to document, and separate out the code for legibility.
 
 Based on the ESP32, this is a completely wireless keyboard, to be used however you would like. 
 
