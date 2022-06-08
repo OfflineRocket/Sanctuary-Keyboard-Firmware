@@ -1,4 +1,4 @@
-# The Sanctuary
+# The Sanctuary Keyboard (Firmware)
 A ESP32 Based Keyboard, that can currently be built!
 
 ## Demo Video (To be added later)
