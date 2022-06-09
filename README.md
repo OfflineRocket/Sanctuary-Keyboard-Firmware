@@ -21,3 +21,11 @@ TODO:
 - Implement Battery monitoring (Requires additional Hardware)
 - Implement Different RGB animations
 - Implement Colour Brightness (and turn off)
+- Implement Software Shutdown (Current solution is a hardware disconnect)
+
+### Updates
+Unfortunately I don't have a lot of time on my hands to flesh out the code. I have written enough to make it a daily driver keyboard (I'm typing on the Sanctuary right now), but it means that updates will be very infrequent. Feel free to fork and modify the code to your own ability, as long as it complies within the License provided.
+
+## License
+
+Licensed under the GNU GPLv3 license. More information available in the LICENSE.md file.
