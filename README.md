@@ -17,7 +17,14 @@ I unfortunately don't have the ability to sell kits or keyboards, but all files 
 
 QMK and other pre-existing keyboard firmware are incompatible, leaving my programming skills up to the test. Basic functionality exists, however future features plan to be added, and as the program gets more complex, so does the ability to track changes (hence git). However, I will fully admit that I am not the greatest programmer in the world, and likely don't have time to manage this repo in full, so please feel free to fork it into your own repo.
 
-TODO:
+### Features:
+- Full key support
+- Multimedia Keys
+- Rotary Encoders
+- Multiple Device Support (Currently 3)
+- RGB Lighting (Currently only Cyan is set)
+
+### TODO:
 - Implement Battery monitoring (Requires additional Hardware)
 - Implement Different RGB animations
 - Implement Colour Brightness (and turn off)
