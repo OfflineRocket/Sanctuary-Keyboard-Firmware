@@ -1,7 +1,7 @@
 # The Sanctuary Keyboard (Firmware)
 A ESP32 Based Keyboard, that can currently be built!
 
-## Demo Video (To be added later)
+## [Demo Video (To be added later)](https://youtu.be/0jshQPa9tzA)
 [![TheSanctuaryDemoVideo](https://img.youtube.com/vi/0jshQPa9tzA/0.jpg)](https://youtu.be/0jshQPa9tzA)
 
 ## [Instructions and Hardware Files Available Here](https://github.com/LegoRocket/Sanctuary-Keyboard-Hardware)
