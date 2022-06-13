@@ -2,6 +2,7 @@
 A ESP32 Based Keyboard, that can currently be built!
 
 ## Demo Video (To be added later)
+![TheSanctuaryDemoVideo](https://youtu.be/0jshQPa9tzA)
 
 ## [Instructions and Hardware Files Available Here](https://github.com/LegoRocket/Sanctuary-Keyboard-Hardware)
 
