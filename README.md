@@ -7,7 +7,7 @@ A ESP32 Based Keyboard, that can currently be built!
 
 ## Firmware
 
-Basic Firmware for The Santuary Wireless Keyboard
+Basic Firmware for The Santuary Wireless Keyboard. Library used for keystrokes is the [ESP32-BLE-Keyboard](https://github.com/T-vK/ESP32-BLE-Keyboard)
 
 All code is included in the "KeyboardFirmwareRev1" folder. Yes, I used the Arduino IDE, but I've tried to document, and separate out the code for legibility.
 
