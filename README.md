@@ -1,12 +1,13 @@
 # The Sanctuary Keyboard (Firmware)
 A Bluetooth Wireless Mechanical Keyboard - That can be currently built!
 
-Based on the ESP32, the Sanctuary functions as a completely wireless keyboard, that can be designed and built yourself. Rather than using obsolete BLE microcontrollers, an ESP32 was chosen, a cheap and readily available BLE microcontroller. Instructions will be available through an instructables link (to be added later).
-
+Based on the ESP32, the Sanctuary functions as a completely wireless keyboard, that can be designed and built yourself. Rather than using obsolete BLE microcontrollers, an ESP32 was chosen, a cheap and readily available BLE microcontroller. Instructions will be available through an [instructables link](https://www.instructables.com/ESP32-Bluetooth-Mechanical-Keyboard-the-Sanctuary/)
 ## [Demo Video](https://youtu.be/0jshQPa9tzA)
 [![TheSanctuaryDemoVideo](https://img.youtube.com/vi/0jshQPa9tzA/0.jpg)](https://youtu.be/0jshQPa9tzA)
 
-## [Instructions and Hardware Files Available Here](https://github.com/LegoRocket/Sanctuary-Keyboard-Hardware)
+## [Hardware Files Available Here](https://github.com/LegoRocket/Sanctuary-Keyboard-Hardware)
+
+## [Instructions Available Here!](https://www.instructables.com/ESP32-Bluetooth-Mechanical-Keyboard-the-Sanctuary/)
 
 ## Firmware
 
