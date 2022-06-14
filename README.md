@@ -37,6 +37,8 @@ QMK and other pre-existing keyboard firmware are incompatible, leaving my progra
 ### Updates
 Unfortunately I don't have a lot of time on my hands to flesh out the code. I have written enough to make it a daily driver keyboard (I'm typing on the Sanctuary right now), but it means that updates will be very infrequent. Feel free to fork and modify the code to your own ability, as long as it complies within the License provided.
 
+# [Follow my Socials](https://linktr.ee/Lego_Rocket)
+
 ## License Information
 
 Licensed under the GNU GPLv3 license. More information available in the LICENSE.md file.
